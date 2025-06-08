@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:24.04
 
 # Install nginx (see http://nginx.org/en/linux_packages.html#Ubuntu)
 RUN \
