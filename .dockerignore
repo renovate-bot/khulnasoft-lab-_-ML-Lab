@@ -1,0 +1,15 @@
+*
+!docker/
+!webapp
+!backend
+**/.env
+webapp/node_modules
+
+!docknet/backend/src/docknet
+!docknet/backend/setup.py
+!docknet/backend/README.md
+
+**/.DS_Store
+**/Thumbs.db
+**/*.pyc
+.DS_Store

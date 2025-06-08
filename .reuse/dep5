@@ -1,0 +1,9 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: ml-lab
+Upstream-Contact: KhulnaSoft Lab <info@khulnasoft.com>
+                  Md Mamun <iconmamundentist@gmail.com>
+Source: https://github.com/khulnasoft/ml-lab
+
+Files: **
+Copyright: KhulnaSoft Lab, Md Mamun
+License: MIT

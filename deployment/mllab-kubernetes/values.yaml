@@ -1,0 +1,226 @@
+# Default values for ml-lab.
+
+# General ML Lab configuration
+labConfig:
+  # Prefix to add to the ML Lab API endpoints. Useful if ML Lab is served behind a reverse proxy on a subpath
+  baseUrlPrefix: ""
+  # Configure an external Open ID Connect (OIDC) provider for passwordless login
+  externalOIDC:
+    # Enable OIDC login (by default only username + password is possible)
+    enabled: false
+    # The domain under which the ML Lab deployment is externally accessible. This is required for the OIDC
+    # login to construct the callback URL.
+    # domain: "ml-lab.local"
+    domain: ""
+    # Client id used for requestion user information
+    clientId: "" #
+    # Client secret used for requestion user information
+    clientSecret: ""
+    # URL of the OIDC provider that a user who wants to login should be redirected to
+    authUrl: ""
+    # URL of the OIDC provider that can be used to request a JWT token for a user
+    tokenUrl: ""
+  # If set to true, users can register themselves whith a new username and password or login directly via OIDC
+  # If set to false, an admin needs to create the user manually first (using the email for OIDC)
+  allowSelfRegistration: true
+  # Terms of service text shown to the user on the login page
+  tosText: ""
+  # Text that is shown in the upload dialog. Can be used to remind the user if specific (confidential) files must not be uploaded.
+  uploadNote: ""
+  # Hide deployment ui (services and jobs)
+  hideDeployments: false
+  # Enable debug mode of ML Lab
+  debug: false
+  # Number of gunicorn server processes used for the backend
+  numServerProcesses: 3
+  # Time in minutes for which a service session token is valid
+  sessionTokenExpiryMinutes: 15 # 15 minutes
+  # Time in seconds between check for idle services
+  serviceIdleCheckInterval: 1200 # 20 minutes
+
+
+
+# Configuration of the ML Lab backend
+labBackend:
+  # Image used for the ml lab backend
+  image:
+    repository: "ghcr.io/khulnasoft/ml-lab/lab-backend"
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  # Resource requirements of the backend deployment
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 3Gi
+    requests:
+      cpu: 100m
+      memory: 1Gi
+  # Other Kubernetes pod configurations
+  nodeSelector: {}
+  tolerations: []
+  podAnnotations: {}
+  podSecurityContext: {}
+  containerSecurityContext: {}
+  imagePullSecrets: []
+  # Service configuration for the backend deployment
+  service:
+    type: ClusterIP
+    port: 8080
+    sshPort: 22
+  # Ingress configuration for external access to the backend
+  ingress:
+    enabled: false
+    annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: "/"
+            pathType: Prefix
+
+# Configuration of the integrated ML Lab Postgres DB
+# If you want to use an external Postgres DB, disable this component
+integratedPostgres:
+  enabled: True
+  # Postgres image to use
+  image:
+    repository: "postgres"
+    tag: "14.2"
+    pullPolicy: IfNotPresent
+  # Resources required for the Postgres deployment
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 3Gi
+    requests:
+      cpu: 100m
+      memory: 1Gi
+  # Size of the persisten volume used for the DB data
+  storageSize: "10Gi"
+  # Storage class to use for the volume
+  storageClassName: ""
+  # Service configuration for the postgres deployment
+  service:
+    type: ClusterIP
+    port: 5432
+  # Other Kubernetes pod configurations
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  podAnnotations: {}
+  podSecurityContext: {}
+  containerSecurityContext: {}
+  imagePullSecrets: []
+
+# Instead of the integrated Postgres DB an external one can be configured
+externalPostgres:
+  enabled: False
+  # Host name of the Postgres instance
+  host: ""
+  # Port of the Postgres instance
+  port: 5432
+  # Name of the database to use on the postgres instance
+  dbName: "postgres"
+
+# Configuration of the integrated ML Lab Minio DB
+# If you want to use an external file storage, disable this component
+integratedMinioStorage:
+  enabled: True
+  # Minio image to use
+  image:
+    repository: "minio/minio"
+    tag: "RELEASE.2021-03-04T00-53-13Z"
+    pullPolicy: IfNotPresent
+  # Resources required for the Minio deployment
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 3Gi
+    requests:
+      cpu: 100m
+      memory: 1Gi
+  # Size of the persisten volume used for the DB data
+  storageSize: "5Gi"
+  # Storage class to use for the volume
+  storageClassName: ""
+  # Service configuration for the minio deployment
+  service:
+    type: ClusterIP
+    port: 9000
+  # Other Kubernetes pod configurations
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  podAnnotations: {}
+  podSecurityContext: {}
+  containerSecurityContext: {}
+  imagePullSecrets: []
+
+# Instead of the integrated Minio DB an external S3 file storage can be
+externalS3Storage:
+  enabled: False
+  url: ""
+
+# Instead of the integrated Minio DB an external Azure blob storage
+externalAzureBlobStorage:
+  enabled: False
+  connectionString: ""
+
+
+# Configuration of the workspace manager component
+workspaceManager:
+  # Set to false if you don't need the workspace manager component
+  enabled: True
+
+  ################################################################################
+  # Workspace Configuration
+  ################################################################################
+  env:
+    WORKSPACE_MEMORY_MB_DEFAULT: "1000"
+    WORKSPACE_MEMORY_MB_MAX: "8000"
+    WORKSPACE_MEMORY_MB_OPTIONS: "1000,2000,4000,8000"
+
+    WORKSPACE_CPUS_DEFAULT: "1"
+    WORKSPACE_CPUS_MAX: "4"
+    WORKSPACE_CPUS_OPTIONS: "1,2,3,4"
+
+    WORKSPACE_IDLE_TIMEOUT_DEFAULT: "0"
+    WORKSPACE_IDLE_TIMEOUT_OPTIONS: "0,3600,7200,14400,28800"
+    WORKSPACE_ALWAYS_CLEAR_VOLUME_ON_STOP: "false"
+
+    WORKSPACE_VOLUME_SIZE: "5000"
+    WORKSPACE_CONTAINER_SIZE: "5000"
+
+
+  ################################################################################
+  # Deployment Configuration
+  ################################################################################
+  image:
+    repository: "ghcr.io/khulnasoft/ml-lab/lab-workspace-manager"
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  # Resources required
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 100m
+      memory: 500Mi
+  # Service configuration
+  service:
+    type: ClusterIP
+    port: 8080
+  # Other Kubernetes pod configurations
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  podAnnotations: {}
+  podSecurityContext: {}
+  containerSecurityContext: {}
+  imagePullSecrets: []

@@ -1,0 +1,3 @@
+[submodule "docknet"]
+	path = docknet
+	url = https://github.com/khulnasoft-lab/DockNet.git

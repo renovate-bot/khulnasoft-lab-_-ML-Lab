@@ -1,0 +1,21 @@
+{{- if .Values.integratedPostgres.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ml-lab.fullname" . }}-postgres
+  labels:
+    {{- include "ml-lab.labels" . | nindent 4 }}
+    ctxy.deploymentType: "core"
+    ctxy.deploymentName: "postgres"
+spec:
+  type: {{ .Values.integratedPostgres.service.type }}
+  ports:
+    - port: {{ .Values.integratedPostgres.service.port }}
+      targetPort: postgres
+      protocol: TCP
+      name: postgres
+  selector:
+    {{- include "ml-lab.selectorLabels" . | nindent 4 }}
+    ctxy.deploymentType: "core"
+    ctxy.deploymentName: "postgres"
+{{- end }}
