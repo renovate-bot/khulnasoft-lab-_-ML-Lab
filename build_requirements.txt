@@ -1,4 +1,4 @@
-pipenv==2024.4.0
+pipenv==2024.4.1
 ml-buildkit==0.6.18
 urllib3==1.26.19
 twine==5.1.1
