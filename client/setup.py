@@ -47,7 +47,7 @@ setup(
     zip_safe=False,
     install_requires=[
         "loguru",
-        "docknet==0.0.21",
+        "docknet==0.0.23",
         "tqdm",
     ],
     # deprecated: dependency_links=dependency_links,

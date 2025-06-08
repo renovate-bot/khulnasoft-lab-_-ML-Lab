@@ -53,7 +53,7 @@ setup(
     install_requires=[
         "fastapi==0.75.2",
         "loguru",
-        "docknet==0.0.20",
+        "docknet==0.0.23",
     ],
     # deprecated: dependency_links=dependency_links,
     extras_require={

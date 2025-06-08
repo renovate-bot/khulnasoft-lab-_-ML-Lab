@@ -48,7 +48,7 @@ setup(
     install_requires=[
         "fastapi",
         "loguru",
-        "docknet==0.0.22",
+        "docknet==0.0.23",
         "croniter",
         "types-croniter",
         "shortuuid",
