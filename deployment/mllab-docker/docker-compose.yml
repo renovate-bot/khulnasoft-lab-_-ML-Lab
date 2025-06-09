@@ -41,7 +41,7 @@ services:
 
   # Initialization container that calls the /system/initialize endpoint and thereby creates the default admin user
   ml-lab-backend-setup:
-    image: curlimages/curl:7.75.0
+    image: curlimages/curl:7.88.1
     entrypoint:
       ["sh", "-c", "sleep 10 && curl -v -X POST http://ml-lab-backend:8080/api/system/initialize"]
     restart: "no"
