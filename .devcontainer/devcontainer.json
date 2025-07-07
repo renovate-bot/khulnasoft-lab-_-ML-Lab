@@ -1,14 +1,13 @@
 {
   "name": "ML Lab Development",
-  "dockerFile": "../Dockerfile",
+  "image": "khulnasoft/build-environment:0.6.18",
   "features": {
     "ghcr.io/devcontainers/features/python:1": {
       "version": "3.11"
     },
     "ghcr.io/devcontainers/features/node:1": {
       "version": "20"
-    },
-    "ghcr.io/devcontainers/features/yarn:1": {}
+    }
   },
   "customizations": {
     "vscode": {
@@ -31,6 +30,6 @@
     }
   },
   "forwardPorts": [30010],
-  "postCreateCommand": "pip install --upgrade pip && pip install -r build_requirements.txt && cd webapp && yarn install --frozen-lockfile",
+  "postCreateCommand": "npm install -g yarn && pip install --upgrade pip && pip install -r build_requirements.txt && cd webapp && yarn install --frozen-lockfile",
   "remoteUser": "vscode"
 }
